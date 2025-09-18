@@ -1,9 +1,11 @@
 # Build backend
 FROM golang:1.21-alpine AS backend
 WORKDIR /app
-COPY backend/ ./
-RUN go mod tidy && go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+COPY backend/go.mod backend/go.sum ./
+RUN echo "=== Contents of go.mod ===" && cat go.mod
+RUN echo "=== Contents of go.sum ===" && cat go.sum  
+RUN echo "=== Go version ===" && go version
+RUN echo "=== Starting go mod download ===" && go mod download -x
 
 # Build frontend
 FROM node:18-alpine AS frontend
